@@ -9,6 +9,7 @@ _coleta/
 __pycache__/
 *.pyc
 .netlify/
+.vercel/
 node_modules/
 .DS_Store
 Thumbs.db

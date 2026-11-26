@@ -1,6 +1,6 @@
 ---
 name: criar-site
-description: Cria, publica e entrega o site one-page de um estabelecimento local (Videira e região) para venda por cold call. Use quando o Rafael passar o nome de uma empresa (e cidade) e pedir para criar/fazer o site, ou digitar /criar-site. Coleta dados no Google Maps/Meu Negócio e Instagram, define o tom de voz, busca referência de estrutura no Pinterest, gera o site com efeitos, mostra preview para aprovação e só então publica (GitHub privado + Netlify) e devolve o link.
+description: Cria, publica e entrega o site one-page de um estabelecimento local (Videira e região) para venda por cold call. Use quando o Rafael passar o nome de uma empresa (e cidade) e pedir para criar/fazer o site, ou digitar /criar-site. Coleta dados no Google Maps/Meu Negócio e Instagram, define o tom de voz, busca referência de estrutura no Pinterest, gera o site com efeitos, mostra preview para aprovação e só então publica (GitHub privado + Vercel) e devolve o link.
 ---
 
 # /criar-site — do nome da empresa ao link publicado
@@ -83,7 +83,7 @@ Apresentar ao Rafael:
 - **Dados que vão ao ar:** endereço, telefone, WhatsApp, horários.
 - **Pendências:** WhatsApp não confirmado, fotos de clientes, seção que ficou curta por falta de dado etc.
 
-Perguntar se pode publicar, com as opções "Publicar" e "Ajustar". **Nada vai para o GitHub nem para a Netlify sem esse OK.**
+Perguntar se pode publicar, com as opções "Publicar" e "Ajustar". **Nada vai para o GitHub nem para a Vercel sem esse OK.**
 
 ## Passo 7 — Publicar (só após o OK)
 
@@ -91,10 +91,11 @@ Perguntar se pode publicar, com as opções "Publicar" e "Ajustar". **Nada vai p
 .venv/Scripts/python.exe -I .claude/skills/criar-site/scripts/publicar.py sites/<slug> --mensagem "Cria o site da <Empresa>"
 ```
 
-O script cria o repo **privado** `<slug>` no GitHub, faz o deploy de produção na Netlify (`<slug>.netlify.app`) e registra a linha em `sites/_controle.md`.
+O script cria o repo **privado** `<slug>` no GitHub, cria/atualiza o projeto `<slug>` na conta Vercel, faz o deploy de produção e registra a URL pública (`<slug>.vercel.app`, ou a variação que a Vercel atribuir se o nome estiver ocupado) em `sites/_controle.md`.
 
-- Nome já usado na Netlify → renomear a pasta para `<slug>-site` e repetir.
-- `netlify` sem login → pedir ao Rafael para rodar `netlify login` no terminal dele. Não tentar logar por ele.
+- O site usa `vercel.json` (cabeçalhos e noindex) e `.vercelignore` (não publica `site.json`), ambos gerados pelo render.
+- O link da entrega é sempre o **alias de produção** `*.vercel.app`, nunca a URL única do deploy (essa fica protegida por login da Vercel).
+- `vercel` sem login → pedir ao Rafael para rodar `vercel login` no terminal dele. Não tentar logar por ele.
 
 Depois, abrir a URL publicada no navegador e confirmar que carrega.
 

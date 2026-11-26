@@ -1,27 +1,28 @@
-"""Publica um site: repositório privado no GitHub + deploy de produção na Netlify.
+"""Publica um site: repositório privado no GitHub + deploy de produção na Vercel.
 
 Uso (SÓ depois do OK do Rafael no checkpoint):
     python -I publicar.py <pasta-do-site> [--mensagem "texto do commit"]
 
-Primeira vez: git init, commit, `gh repo create <slug> --private --push`,
-`netlify deploy --prod --site-name <slug>` (cria o site e liga a pasta).
-Vezes seguintes: commit + push + `netlify deploy --prod` no site já ligado.
-Imprime a URL final e atualiza sites/_controle.md.
+Primeira vez: git init, commit, `gh repo create <slug> --private --push` e
+`vercel deploy --prod --project <slug> --create-if-missing` (cria o projeto na conta Vercel).
+Vezes seguintes: commit + push + novo deploy de produção no mesmo projeto.
+Imprime a URL pública (<slug>.vercel.app ou a variação que a Vercel atribuir)
+e atualiza sites/_controle.md.
 """
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import subprocess
 import sys
 from datetime import date
 from pathlib import Path
 
-GITIGNORE = ".netlify/\nlista-imagens.txt\nbriefing.md\n"
+GITIGNORE = ".vercel/\nlista-imagens.txt\nbriefing.md\n"
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
-
 
 
 def rodar(cmd: list[str], pasta: Path, checar: bool = True) -> str:
@@ -29,7 +30,7 @@ def rodar(cmd: list[str], pasta: Path, checar: bool = True) -> str:
     r = subprocess.run([exe, *cmd[1:]], cwd=pasta, capture_output=True, text=True, encoding="utf-8")
     if checar and r.returncode != 0:
         raise SystemExit(f"Falhou: {' '.join(cmd)}\n{r.stdout}\n{r.stderr}")
-    return r.stdout.strip()
+    return (r.stdout + "\n" + r.stderr).strip()
 
 
 def git(pasta: Path, mensagem: str) -> str:
@@ -41,23 +42,34 @@ def git(pasta: Path, mensagem: str) -> str:
     rodar(["git", "add", "-A"], pasta)
     if rodar(["git", "status", "--porcelain"], pasta):
         rodar(["git", "commit", "-m", mensagem], pasta)
-    slug = pasta.name
     remoto = rodar(["git", "remote"], pasta, checar=False)
     if "origin" not in remoto.split():
-        rodar(["gh", "repo", "create", slug, "--private", "--source", ".", "--push"], pasta)
+        rodar(["gh", "repo", "create", pasta.name, "--private", "--source", ".", "--push"], pasta)
     else:
         rodar(["git", "push", "-u", "origin", "main"], pasta)
-    return rodar(["gh", "repo", "view", "--json", "url", "-q", ".url"], pasta)
+    return rodar(["gh", "repo", "view", "--json", "url", "-q", ".url"], pasta).splitlines()[0]
 
 
-def netlify(pasta: Path, mensagem: str) -> str:
-    base = ["netlify", "deploy", "--prod", "--dir", ".", "--no-build", "--json", "--message", mensagem]
-    ligado = (pasta / ".netlify" / "state.json").exists()
-    cmd = base if ligado else [*base, "--site-name", pasta.name]
-    saida = rodar(cmd, pasta)
-    inicio = saida.find("{")
-    dados = json.loads(saida[inicio:]) if inicio >= 0 else {}
-    return dados.get("url") or dados.get("deploy_url") or saida
+def hosts_vercel(texto: str) -> list[str]:
+    return sorted(set(re.findall(r"[a-z0-9][a-z0-9-]*\.vercel\.app", texto.lower())), key=len)
+
+
+def vercel(pasta: Path) -> str:
+    """Faz o deploy de produção e devolve a URL pública (o alias de produção)."""
+    slug = pasta.name
+    saida = rodar(["vercel", "deploy", ".", "--prod", "--yes", "--project", slug,
+                   "--create-if-missing", "--json"], pasta)
+    hosts = hosts_vercel(saida)
+    # O deploy em si tem uma URL única (protegida); o público é o alias de produção.
+    if hosts:
+        detalhes = rodar(["vercel", "inspect", hosts[-1], "--json"], pasta, checar=False)
+        hosts = hosts_vercel(saida + "\n" + detalhes)
+    if f"{slug}.vercel.app" in hosts:
+        return f"https://{slug}.vercel.app"
+    aliases = [h for h in hosts if h.startswith(slug)]
+    if aliases:
+        return f"https://{aliases[0]}"
+    raise SystemExit(f"Deploy feito, mas não achei a URL pública na saída:\n{saida}")
 
 
 def registrar(pasta: Path, repo: str, url: str) -> None:
@@ -77,8 +89,10 @@ def main() -> None:
     mensagem = args[args.index("--mensagem") + 1] if "--mensagem" in args else "Publica o site"
     if not (pasta / "index.html").exists():
         raise SystemExit("index.html não encontrado — rode render.py antes.")
+    if "Logged out" in rodar(["vercel", "whoami"], pasta, checar=False):
+        raise SystemExit("Vercel CLI sem login: peça ao Rafael para rodar `vercel login`.")
     repo = git(pasta, mensagem)
-    url = netlify(pasta, mensagem)
+    url = vercel(pasta)
     registrar(pasta, repo, url)
     print(f"\nREPO {repo}\nSITE {url}")
 

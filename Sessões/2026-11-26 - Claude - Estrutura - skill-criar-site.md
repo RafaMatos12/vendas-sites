@@ -56,6 +56,22 @@ O Rafael quer levantar caixa vendendo sites de apresentação para estabelecimen
 | 6 | Commit inicial do workspace (só com OK) | Claude |
 | 7 | Decidir se o VendasSites entra na tabela de workspaces e de sessões das Regras Operacionais | Rafael |
 
+## Atualização no mesmo dia — deploy trocado para a Vercel
+
+O Rafael já tem um projeto de sites rodando na Vercel e preferiu concentrar tudo lá.
+
+| Decisão | Porquê | Risco aceito |
+|---|---|---|
+| Deploy na **Vercel**, na conta que ele já usa, substituindo a Netlify | Um painel só para todos os sites | O plano Hobby (grátis) é só para uso não comercial; site vendido a cliente fica fora dos termos até migrar para o Pro (~US$ 20/mês) |
+
+O que mudou na skill:
+- `publicar.py` agora usa `vercel deploy --prod --project <slug> --create-if-missing` e devolve o alias público `*.vercel.app`, não a URL única do deploy, que é protegida.
+- `render.py` gera `vercel.json` (cabeçalhos e noindex) e `.vercelignore` (não publica `site.json`) no lugar do `_headers`.
+- SKILL.md e README foram atualizados.
+- A Vercel CLI 67.0.0 foi instalada. A Netlify CLI continua instalada, mas sem uso.
+
+Testado: render com `vercel.json` sem erros e o parser de URL do `publicar.py`. **Não testado:** o deploy real, porque a CLI está sem login. O passo 1 de "Próximos passos" agora é `vercel login`, e a conta Netlify deixou de ser necessária.
+
 ## Notas relacionadas
 
 - LimitLess: `02 - Projetos/StartUps/Vendas Sites.md`

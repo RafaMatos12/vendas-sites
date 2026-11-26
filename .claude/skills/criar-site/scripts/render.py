@@ -6,7 +6,7 @@ Uso:
 Lê <pasta-do-site>/site.json e escreve, na mesma pasta:
     index.html, styles.css (base, sempre atualizado), main.js,
     custom.css (só se não existir — é onde vão os ajustes do site),
-    favicon.svg, robots.txt, _headers (noindex enquanto demo=true).
+    favicon.svg, robots.txt, vercel.json (noindex enquanto demo=true), .vercelignore.
 """
 from __future__ import annotations
 
@@ -387,10 +387,19 @@ def render(pasta: Path) -> None:
         f'<text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,sans-serif" font-size="36" font-weight="700" fill="#fff">{inicial}</text></svg>',
         encoding="utf-8")
     (pasta / "robots.txt").write_text("User-agent: *\n" + ("Disallow: /\n" if demo else "Allow: /\n"), encoding="utf-8")
-    cabecalhos = "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n"
+    # Configuração da Vercel: cabeçalhos de segurança e noindex enquanto for demo.
+    cabecalhos = [{"key": "X-Content-Type-Options", "value": "nosniff"},
+                  {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}]
     if demo:
-        cabecalhos += "  X-Robots-Tag: noindex, nofollow\n"
-    (pasta / "_headers").write_text(cabecalhos, encoding="utf-8")
+        cabecalhos.append({"key": "X-Robots-Tag", "value": "noindex, nofollow"})
+    vercel = {"$schema": "https://openapi.vercel.sh/vercel.json", "framework": None,
+              "headers": [{"source": "/(.*)", "headers": cabecalhos}]}
+    (pasta / "vercel.json").write_text(json.dumps(vercel, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # O que não vai para o site publicado (fica só no repositório).
+    (pasta / ".vercelignore").write_text("site.json\nlista-imagens.txt\nbriefing.md\n.git\n", encoding="utf-8")
+    antigo = pasta / "_headers"  # resquício da época da Netlify
+    if antigo.exists():
+        antigo.unlink()
     print(f"OK: {pasta / 'index.html'}  (demo={demo}, whatsapp={'sim' if numero else 'NÃO'})")
 
 

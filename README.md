@@ -18,7 +18,7 @@ A skill (`.claude/skills/criar-site/`) segue estes passos:
 4. Gera o site one-page com efeitos.
 5. Verifica o site.
 6. **Para e mostra o preview para seu OK.**
-7. Publica num repo privado no GitHub e na Netlify.
+7. Publica num repo privado no GitHub e na Vercel (`<slug>.vercel.app`).
 8. Entrega o link e uma mensagem pronta para mandar ao cliente.
 
 ## Estrutura
@@ -37,8 +37,8 @@ A skill (`.claude/skills/criar-site/`) segue estes passos:
 ```powershell
 python -m venv .venv
 .venv\Scripts\python.exe -m pip install pillow
-npm i -g netlify-cli
-netlify login
+npm i -g vercel
+vercel login
 gh auth status
 ```
 
