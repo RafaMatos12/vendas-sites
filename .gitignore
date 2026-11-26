@@ -1,0 +1,15 @@
+# Cada site em sites/<slug>/ é um repositório próprio (publicado no GitHub).
+# Aqui fica só o controle.
+sites/*/
+!sites/_controle.md
+
+# Material bruto de coleta (prints, HTML salvo) — não versionar
+_coleta/
+
+__pycache__/
+*.pyc
+.netlify/
+node_modules/
+.DS_Store
+Thumbs.db
+.venv/

@@ -1,0 +1,84 @@
+{
+  "demo": true,
+  "efeitos": "medio",
+  "referencias": [
+    "https://br.pinterest.com/pin/EXEMPLO-1/",
+    "https://br.pinterest.com/pin/EXEMPLO-2/"
+  ],
+  "empresa": {
+    "nome": "Padaria Exemplo",
+    "segmento": "Padaria e Confeitaria",
+    "slogan": "Pão quentinho saindo do forno o dia inteiro.",
+    "cidade": "Videira",
+    "uf": "SC",
+    "endereco": "Rua Exemplo, 123 - Centro, Videira - SC, 89560-000",
+    "maps_url": "",
+    "maps_consulta": "Padaria Exemplo, Rua Exemplo, 123, Videira - SC",
+    "telefone": "(49) 3566-0000",
+    "whatsapp": "(49) 99999-0000",
+    "instagram": "padariaexemplo",
+    "horarios": [
+      { "dias": "Segunda a sexta", "horas": "6h às 20h" },
+      { "dias": "Sábado", "horas": "6h às 13h" },
+      { "dias": "Domingo", "horas": "Fechado" }
+    ]
+  },
+  "tema": {
+    "tom": "familiar",
+    "cores": { "primaria": "#8B4513", "secundaria": "#D9A441" }
+  },
+  "hero": {
+    "variante": "split",
+    "imagem": "img/hero.webp",
+    "alt": "Pães artesanais no balcão da padaria",
+    "titulo": "O pão de todo dia, feito como em casa",
+    "subtitulo": "Fornadas fresquinhas desde as 6h, doces da vó e aquele cafezinho pra começar bem o dia.",
+    "cta": "Fazer encomenda"
+  },
+  "faixa": ["Pão quentinho o dia todo", "Encomendas de bolos", "Café colonial", "Feito aqui, todo dia"],
+  "sobre": {
+    "sobretitulo": "Nossa história",
+    "titulo": "Uma padaria de bairro, do jeito que tem que ser",
+    "texto": [
+      "Parágrafo curto com fatos reais coletados (desde quando, quem toca, o que tem de especial).",
+      "Segundo parágrafo opcional."
+    ],
+    "destaques": ["Massa fermentada naturalmente", "Encomendas para festas", "Atendimento de família"],
+    "imagem": "img/sobre.webp",
+    "alt": "Equipe da padaria"
+  },
+  "oferta": {
+    "menu": "Produtos",
+    "sobretitulo": "O que tem aqui",
+    "titulo": "Do café da manhã à sobremesa",
+    "descricao": "Frase curta opcional.",
+    "itens": [
+      { "nome": "Pães artesanais", "descricao": "Francês, integral, de fermentação natural.", "imagem": "img/oferta-1.webp" },
+      { "nome": "Bolos e tortas", "descricao": "Por encomenda, para qualquer festa.", "imagem": "img/oferta-2.webp" },
+      { "nome": "Salgados", "descricao": "Assados e fritos, fresquinhos." }
+    ]
+  },
+  "avaliacoes": {
+    "titulo": "O que dizem da gente",
+    "nota": 4.8,
+    "total": 213,
+    "destaques": [
+      { "autor": "Maria S.", "estrelas": 5, "texto": "Trecho real da avaliação do Google." },
+      { "autor": "João P.", "estrelas": 5, "texto": "Outro trecho real." },
+      { "autor": "Ana L.", "estrelas": 5, "texto": "Mais um trecho real." }
+    ]
+  },
+  "galeria_titulo": "Um pouco do nosso dia a dia",
+  "galeria": [
+    { "src": "img/galeria-1.webp", "alt": "Descrição curta" },
+    { "src": "img/galeria-2.webp", "alt": "Descrição curta" }
+  ],
+  "local_titulo": "Passa aqui!",
+  "whatsapp_mensagem": "Olá! Vi o site da Padaria Exemplo e gostaria de fazer uma encomenda.",
+  "whatsapp_balao": "Faça sua encomenda!",
+  "seo": {
+    "titulo": "Padaria Exemplo · Padaria e Confeitaria em Videira - SC",
+    "descricao": "Pães artesanais, bolos por encomenda e café colonial no Centro de Videira."
+  },
+  "schema_tipo": "Bakery"
+}
