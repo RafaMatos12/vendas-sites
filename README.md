@@ -17,9 +17,9 @@ A skill (`.claude/skills/criar-site/`) segue estes passos:
 3. Busca referência de estrutura no Pinterest.
 4. Gera o site one-page com efeitos.
 5. Verifica o site.
-6. **Para e mostra o preview para seu OK.**
-7. Publica num repo privado no GitHub e na Vercel (`<slug>.vercel.app`).
-8. Entrega o link e uma mensagem pronta para mandar ao cliente.
+6. **Entrega só o link do localhost** (`http://localhost:8800/<slug>/`), sem narrar o processo, para economizar tokens.
+7. Quando você disser **"publicar"**: sobe num repo privado no GitHub e na Vercel (`<slug>.vercel.app`).
+8. Entrega o link público e uma mensagem pronta para mandar ao cliente.
 
 ## Estrutura
 

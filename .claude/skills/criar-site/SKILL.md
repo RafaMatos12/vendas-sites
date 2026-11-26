@@ -1,11 +1,20 @@
 ---
 name: criar-site
-description: Cria, publica e entrega o site one-page de um estabelecimento local (Videira e região) para venda por cold call. Use quando o Rafael passar o nome de uma empresa (e cidade) e pedir para criar/fazer o site, ou digitar /criar-site. Coleta dados no Google Maps/Meu Negócio e Instagram, define o tom de voz, busca referência de estrutura no Pinterest, gera o site com efeitos, mostra preview para aprovação e só então publica (GitHub privado + Vercel) e devolve o link.
+description: Cria o site one-page de um estabelecimento local (Videira e região) para venda por cold call e entrega pronto no localhost. Use quando o Rafael passar o nome de uma empresa (e cidade) e pedir para criar/fazer o site, ou digitar /criar-site. Coleta dados no Google Maps/Meu Negócio e Instagram, define o tom de voz, busca referência de estrutura no Pinterest, gera o site com efeitos e devolve só o link do localhost. Publica (GitHub privado + Vercel) apenas quando o Rafael pedir "publicar".
 ---
 
-# /criar-site — do nome da empresa ao link publicado
+# /criar-site — do nome da empresa ao site pronto no localhost
 
-O papel do Rafael é **dizer a empresa e fornecer dados extras**. Todo o resto é desta skill, com **uma única parada**: o checkpoint antes de publicar.
+O papel do Rafael é **dizer a empresa e fornecer dados extras**. Todo o resto é desta skill. A entrega é o **site finalizado + o link do localhost**. Publicar é um segundo comando, só quando ele pedir.
+
+## Modo silencioso (obrigatório)
+
+Para economizar tokens:
+
+- **Não narrar** o que está fazendo, nem antes nem entre as ferramentas. Nada de "agora vou…", resumos de etapa ou explicação de decisões.
+- Não tirar screenshots só para mostrar; usar `read_page`/`get_page_text`/`javascript_tool` para conferir, e screenshot apenas se precisar enxergar um problema visual.
+- Não usar `update_plan` nem `wrap_up` durante a skill.
+- Só falar com o Rafael em dois casos: **bloqueio** (empresa ambígua/não encontrada, login necessário) com uma pergunta curta, ou a **entrega final** no formato do Passo 6.
 
 Entrada típica: `/criar-site Padaria Bom Gosto, Videira` (opcional: @instagram, telefone, observações da ligação).
 
@@ -72,20 +81,21 @@ Pinterest é **inspiração de estrutura** (ordem das seções, ritmo, composiç
    - O botão do WhatsApp abre `wa.me/55…` com a mensagem certa.
    - O mapa mostra o lugar certo.
    - Não há erro no console (`read_console_messages`).
-4. Tirar 2 screenshots (mobile e desktop) para o checkpoint. Voltar o viewport para desktop depois.
+4. Corrigir o que falhar sem relatar. Voltar o viewport para desktop no fim e deixar o preview aberto em `http://localhost:8800/<slug>/`.
 
-## Passo 6 — CHECKPOINT (parar aqui)
+## Passo 6 — Entrega local (fim da skill)
 
-Apresentar ao Rafael:
+A resposta final é **só isto**, sem mais texto:
 
-- **Preview** aberto no painel do navegador.
-- **Resumo da análise:** segmento, tom escolhido e por quê (2 linhas), paleta, referência do Pinterest usada.
-- **Dados que vão ao ar:** endereço, telefone, WhatsApp, horários.
-- **Pendências:** WhatsApp não confirmado, fotos de clientes, seção que ficou curta por falta de dado etc.
+```
+**<Empresa>** — http://localhost:8800/<slug>/
+Pendências: <itens curtos separados por " · ">
+```
 
-Perguntar se pode publicar, com as opções "Publicar" e "Ajustar". **Nada vai para o GitHub nem para a Vercel sem esse OK.**
+- A linha de pendências só aparece se houver algo que o Rafael precise confirmar: WhatsApp não confirmado, fotos de clientes usadas, seção cortada por falta de dado.
+- **Nada vai para o GitHub nem para a Vercel** nesta etapa. Se o Rafael pedir ajuste, ajustar e responder de novo só com o link.
 
-## Passo 7 — Publicar (só após o OK)
+## Passo 7 — Publicar (só quando o Rafael pedir "publicar")
 
 ```
 .venv/Scripts/python.exe -I .claude/skills/criar-site/scripts/publicar.py sites/<slug> --mensagem "Cria o site da <Empresa>"
@@ -100,14 +110,13 @@ O script cria o repo **privado** `<slug>` no GitHub, cria/atualiza o projeto `<s
 
 Depois, abrir a URL publicada no navegador e confirmar que carrega.
 
-## Passo 8 — Entregar
+## Passo 8 — Entregar o link publicado
 
-Responder com:
+Mesmo modo silencioso. Responder só com:
 
-1. **Link** do site (em destaque).
+1. **Link** `*.vercel.app` em destaque.
 2. **Mensagem pronta para o WhatsApp do cliente**, curta e no tom da empresa. Exemplo para tom familiar:
    > Oi, <nome>! Aqui é o Rafael, falamos por telefone. Montei uma prévia do site da <Empresa> pra você ver como fica: <link>. Dá uma olhada no celular e me conta o que achou!
-3. O repo do GitHub e as pendências que sobraram.
 
 ## Depois da venda
 
