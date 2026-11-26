@@ -37,8 +37,8 @@ A skill (`.claude/skills/criar-site/`) segue estes passos:
 ```powershell
 python -m venv .venv
 .venv\Scripts\python.exe -m pip install pillow
-npm i -g vercel
-vercel login
+npm.cmd i -g vercel      # .cmd contorna o bloqueio de scripts .ps1 do PowerShell
+vercel.cmd login
 gh auth status
 ```
 

@@ -95,7 +95,8 @@ O script cria o repo **privado** `<slug>` no GitHub, cria/atualiza o projeto `<s
 
 - O site usa `vercel.json` (cabeçalhos e noindex) e `.vercelignore` (não publica `site.json`), ambos gerados pelo render.
 - O link da entrega é sempre o **alias de produção** `*.vercel.app`, nunca a URL única do deploy (essa fica protegida por login da Vercel).
-- `vercel` sem login → pedir ao Rafael para rodar `vercel login` no terminal dele. Não tentar logar por ele.
+- `vercel` sem login → abrir `vercel.cmd login` numa aba do terminal do Rafael (`run_in_terminal`) e pedir que ele autorize no navegador. Não tentar logar por ele.
+- Instalar ferramentas globais (`npm -g`) sempre pelo terminal do Rafael, com `npm.cmd`. Instalação feita pelo Bash da sessão pode ficar isolada e não chegar ao Windows dele (aconteceu em 26/11/2026).
 
 Depois, abrir a URL publicada no navegador e confirmar que carrega.
 
